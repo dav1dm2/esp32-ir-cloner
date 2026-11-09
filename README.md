@@ -64,20 +64,4 @@ pio device monitor --port /dev/ttyUSB0 --baud 115200
 
 Replace `/dev/ttyUSB0` in the upload and monitor commands with the port shown for your board, such as `COM3` on Windows. The upload port in `platformio.ini` defaults to `/dev/ttyUSB0`. The command-line flag overrides it. Update the setting for uploads through VS Code, or remove it to let PlatformIO detect the port. [PlatformIO upload options](https://docs.platformio.org/en/stable/userguide/cmd_run.html)
 
-The firmware compiled with PlatformIO Core 6.2.0, Espressif 32 platform 6.12.0, Arduino-ESP32 2.0.17, and IRremoteESP8266 2.9.0. Use the steps below to verify capture and replay on your hardware.
-
-## Teach and test
-
-1. Open the serial monitor. After reset, the firmware reports the stored timing count for each slot, then prints `Ready.` as part of its startup message. A count of zero means the slot is empty.
-2. Hold the cloner's `ON` button for about **3 seconds**. When the status LED starts blinking slowly or the serial monitor shows `[ASSIGN ON]`, point the original remote at the KY-022 and press the desired command once within **5 seconds**.
-3. Look for three quick blinks and a captured timing count followed by `Saved.`. If you get one long blink and `Nothing saved.`, try again. Teach the `OFF` button the same way. Each label is a slot name, so the actual behavior depends on the remote command you teach it.
-4. Aim the IR emitter at the appliance from close range. Briefly press and release each cloner button and check the appliance's response. The status LED turns on during transmission and the serial monitor reports `[TRANSMIT ON]` or `[TRANSMIT OFF]`.
-5. Power-cycle the ESP32 and repeat the replay test to confirm both commands were restored from flash. To replace one command, hold the matching cloner button again and teach it a new command. If the learning window expires without an accepted capture, the previous assignment stays in place.
-
-| Symptom | What to check |
-| --- | --- |
-| The board fails to upload | Use a USB data cable, confirm the serial port, and close any serial monitor using it. |
-| `Nothing saved.` | Verify receiver power, ground, and `OUT` wiring. Wait for the assignment prompt before pressing the remote. The serial log also reports short captures and overflows. |
-| `[ON] no signal stored yet` or `[OFF] no signal stored yet` | Teach the indicated slot before trying to replay it. |
-| Replay logs a transmission but the appliance does not respond | Check IR LED polarity and GPIO4 wiring. Move the emitter closer and aim it at the appliance's IR window. Verify the original remote works, then try teaching a fresh press. Some remotes require a different carrier or a longer sequence than this firmware captures. |
-| Both buttons toggle power | Check the original remote. If it sends a toggle command, teaching it to both slots reproduces the toggle in both slots. |
+The firmware compiled with PlatformIO Core 6.2.0, Espressif 32 platform 6.12.0, Arduino-ESP32 2.0.17, and IRremoteESP8266 2.9.0.
